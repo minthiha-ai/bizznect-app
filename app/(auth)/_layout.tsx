@@ -2,7 +2,8 @@ import GlobalStyles from '@/components/GlobalStyles';
 import { images } from '@/constants';
 import { Slot } from 'expo-router';
 import React from 'react';
-import { Dimensions, Image, KeyboardAvoidingView, Platform, SafeAreaView, View } from 'react-native';
+import { Dimensions, Image, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function _Layout() {
     return (
@@ -18,13 +19,13 @@ export default function _Layout() {
                 />
             </View>
             {/* Page Content */}
-            <KeyboardAvoidingView
+            {/* <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                 className="flex-1"
                 keyboardVerticalOffset={32}
-            >
-                <Slot />
-            </KeyboardAvoidingView>
+            > */}
+            <Slot />
+            {/* </KeyboardAvoidingView> */}
         </SafeAreaView>
     );
 }

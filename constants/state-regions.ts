@@ -1,0 +1,20 @@
+export const stateRegions = [
+    { id: 1, SR_Code: "MMR001", SR_Name: "Kachin", SR_Name_MMR: "ကချင်" },
+    { id: 2, SR_Code: "MMR002", SR_Name: "Kayah", SR_Name_MMR: "ကယား" },
+    { id: 3, SR_Code: "MMR003", SR_Name: "Kayin", SR_Name_MMR: "ကရင်" },
+    { id: 4, SR_Code: "MMR004", SR_Name: "Chin", SR_Name_MMR: "ချင်း" },
+    { id: 5, SR_Code: "MMR005", SR_Name: "Sagaing", SR_Name_MMR: "စစ်ကိုင်း" },
+    { id: 6, SR_Code: "MMR006", SR_Name: "Tanintharyi", SR_Name_MMR: "တနင်္သာရီ" },
+    { id: 7, SR_Code: "MMR007", SR_Name: "Bago (East)", SR_Name_MMR: "ပဲခူး(အရှေ့)" },
+    { id: 8, SR_Code: "MMR008", SR_Name: "Bago (West)", SR_Name_MMR: "ပဲခူး(အနောက်)" },
+    { id: 9, SR_Code: "MMR009", SR_Name: "Magway", SR_Name_MMR: "မကွေး" },
+    { id: 10, SR_Code: "MMR010", SR_Name: "Mandalay", SR_Name_MMR: "မန္တလေး" },
+    { id: 11, SR_Code: "MMR011", SR_Name: "Mon", SR_Name_MMR: "မွန်" },
+    { id: 12, SR_Code: "MMR012", SR_Name: "Rakhine", SR_Name_MMR: "ရခိုင်" },
+    { id: 13, SR_Code: "MMR013", SR_Name: "Yangon", SR_Name_MMR: "ရန်ကုန်" },
+    { id: 14, SR_Code: "MMR014", SR_Name: "Shan (South)", SR_Name_MMR: "ရှမ်း(တောင်)" },
+    { id: 15, SR_Code: "MMR015", SR_Name: "Shan (North)", SR_Name_MMR: "ရှမ်း(မြောက်)" },
+    { id: 16, SR_Code: "MMR016", SR_Name: "Shan (East)", SR_Name_MMR: "ရှမ်း(အရှေ့)" },
+    { id: 17, SR_Code: "MMR017", SR_Name: "Ayeyarwady", SR_Name_MMR: "ဧရာ၀တီ" },
+    { id: 18, SR_Code: "MMR018", SR_Name: "Naypyitaw", SR_Name_MMR: "နေပြည်တော်" }
+];

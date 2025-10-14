@@ -38,15 +38,15 @@ const CustomInput = ({
                 <View style={{ flex: 1, position: 'relative' }}>
                     <TextInput
                         className={`
-              py-2
-              text-lg
-              text-black
-              border-b-2
-              font-quicksand
-              ${isFocused ? 'border-blue-100' : 'border-gray-200'}
-              ${error ? 'border-red-500' : ''}
-              ${inputClassName}
-            `}
+                            py-2
+                            text-lg
+                            text-black
+                            border-b-2
+                            font-quicksand
+                            ${isFocused ? 'border-blue-100' : 'border-gray-200'}
+                            ${error ? 'border-red-500' : ''}
+                            ${inputClassName}
+                        `}
                         value={value}
                         onChangeText={onChangeText}
                         placeholder={placeholder}

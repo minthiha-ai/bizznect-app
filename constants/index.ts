@@ -34,6 +34,7 @@ export const categoryData = [
     { id: "c11", name: "Category", icon: "droplet", color: "#FFEAEA", iconColor: "#FF6363" },
     { id: "c12", name: "Category", icon: "coffee", color: "#FFF8E1", iconColor: "#FFB300" },
 ];
+
 export const promoBanners = [
     {
         id: 'promo1',
@@ -46,12 +47,37 @@ export const promoBanners = [
     {
         id: 'promo2',
         title: 'Buy 1 Get 1 Free',
-        subtitle: 'Limited time only. Don\'t miss out!',
+        subtitle: "Limited time only. Don't miss out!",
         image: banner,
         cta: 'Grab Deal',
         backgroundColor: '#DC661F',
     },
+    {
+        id: 'promo3',
+        title: 'Weekend Specials',
+        subtitle: 'Exclusive discounts just for this weekend.',
+        image: banner,
+        cta: 'Explore',
+        backgroundColor: '#107A8B',
+    },
+    {
+        id: 'promo4',
+        title: 'Mega Clearance',
+        subtitle: 'Clearance items at up to 70% off.',
+        image: banner,
+        cta: 'Save Big',
+        backgroundColor: '#DE8708',
+    },
+    {
+        id: 'promo5',
+        title: 'New Arrivals',
+        subtitle: 'Check out the latest products in store.',
+        image: banner,
+        cta: 'Discover',
+        backgroundColor: '#8B5CF6',
+    },
 ];
+
 
 export const ecomProducts = [
     {

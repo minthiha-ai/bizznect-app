@@ -2,12 +2,12 @@ import {
     getAllBusinesses,
     getAllCategories,
     getBusinessDetail,
-    searchBusinesses
+    searchBusinesses,
 } from '@/lib/services/businessService'
 import { create } from 'zustand'
 
-type Category = {
-    id: number
+export type Category = {
+    id: string
     name: string
     icon: string
     slug?: string
@@ -15,7 +15,7 @@ type Category = {
     updated_at?: string | null
 }
 
-type Business = {
+export type Business = {
     id: string
     admin_id: number
     name: string
@@ -28,6 +28,7 @@ type Business = {
     address: string
     website: string
     logo: string
+    qrCode: string
     status: string
     created_at: string
     updated_at: string
@@ -40,18 +41,25 @@ type GlobalStore = {
     setCategories: (cats: Category[]) => void
     fetchCategories: () => Promise<void>
 
-    // Businesses
+    // Business list
     businesses: Business[]
     setBusinesses: (biz: Business[]) => void
     fetchBusinesses: () => Promise<void>
-    fetchBusinessDetail: (id: string) => Promise<Business | null>
+    filteredBusinesses: (slug: string) => Business[]
     searchBusinesses: (params: any) => Promise<Business[]>
+
+    // Business detail
+    businessDetail: Business | null
+    setBusinessDetail: (biz: Business) => void
+    fetchBusinessDetail: (id: string) => Promise<void>
+    getBusinessesByOwner: (adminId: number) => Business[]
 }
 
-export const useGlobalStore = create<GlobalStore>((set) => ({
+export const useGlobalStore = create<GlobalStore>((set, get) => ({
     // Categories
     categories: [],
     setCategories: (cats) => set({ categories: cats }),
+
     fetchCategories: async () => {
         try {
             const res = await getAllCategories()
@@ -64,23 +72,21 @@ export const useGlobalStore = create<GlobalStore>((set) => ({
     // Businesses
     businesses: [],
     setBusinesses: (biz) => set({ businesses: biz }),
+
     fetchBusinesses: async () => {
         try {
             const res = await getAllBusinesses()
-            set({ businesses: res.data })
+            set({ businesses: res.data.data })
         } catch (err) {
             console.error('Failed to fetch businesses:', err)
         }
     },
 
-    fetchBusinessDetail: async (id) => {
-        try {
-            const res = await getBusinessDetail(id)
-            return res.data
-        } catch (err) {
-            console.error('Failed to fetch business detail:', err)
-            return null
-        }
+    filteredBusinesses: (slug: string) => {
+        const businesses = get().businesses
+        return businesses.filter((biz) =>
+            biz.categories?.some((cat) => cat.slug === slug)
+        )
     },
 
     searchBusinesses: async (params) => {
@@ -91,5 +97,26 @@ export const useGlobalStore = create<GlobalStore>((set) => ({
             console.error('Failed to search businesses:', err)
             return []
         }
-    }
+    },
+
+    // Business Detail
+    businessDetail: null,
+
+    setBusinessDetail: (biz) => {
+        set({ businessDetail: biz })
+    },
+
+    fetchBusinessDetail: async (id) => {
+        try {
+            const res = await getBusinessDetail(id)
+            console.log('Fetched business detail:', res.data)
+            set({ businessDetail: res.data })
+        } catch (err) {
+            console.error('Failed to fetch business detail:', err)
+        }
+    },
+
+    getBusinessesByOwner: (adminId) => {
+        return get().businesses.filter((biz) => biz.admin_id === adminId)
+    },
 }))

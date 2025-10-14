@@ -1,16 +1,14 @@
-import { FlatList, Image, Text, View } from "react-native";
-
-type Category = {
-    id: string;
-    name: string;
-    icon: string;
-};
+import { useRouter } from "expo-router";
+import { FlatList, Image, Pressable, Text, View } from "react-native";
+import GlobalStyles from "./GlobalStyles";
+import { Category } from "@/stores/global-store";
 
 type CategoryListProps = {
     categories: Category[];
 };
 
 export default function CategoryList({ categories }: CategoryListProps) {
+    const router = useRouter();
     return (
         <View className="mb-5">
             <FlatList
@@ -19,8 +17,20 @@ export default function CategoryList({ categories }: CategoryListProps) {
                 showsHorizontalScrollIndicator={false}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => (
-                    <View className="items-center mx-2 w-16">
-                        <View className="size-12 rounded-full bg-blue-100/10 justify-center items-center mb-1">
+                    <Pressable
+                        className="items-center mx-2 w-16"
+                        style={GlobalStyles.shadow}
+                        onPress={() =>
+                            router.push({
+                                pathname: "/(business)/category-business",
+                                params: { slug: item.slug, id: item.id },
+                            })
+                        }
+                    >
+                        <View
+                            className="size-12 rounded-full bg-blue-100/10 justify-center items-center mb-1"
+                            style={GlobalStyles.shadow}
+                        >
                             <Image
                                 source={{ uri: item.icon }}
                                 className="w-6 h-6"
@@ -34,7 +44,7 @@ export default function CategoryList({ categories }: CategoryListProps) {
                         >
                             {item.name}
                         </Text>
-                    </View>
+                    </Pressable>
                 )}
                 contentContainerStyle={{ paddingHorizontal: 0 }}
             />

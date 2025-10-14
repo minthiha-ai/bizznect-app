@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, Pressable, Text, View } from "react-native";
+import { Image, Pressable, Text } from "react-native";
 
 type BusinessCardProps = {
     id: string;
@@ -11,15 +11,16 @@ type BusinessCardProps = {
 const BusinessCard: React.FC<BusinessCardProps> = ({
     id, name, image, onPress
 }) => (
-    <View className="bg-white rounded-xl items-center min-h-[140px] shadow"
-        // style={{
-        //     shadowColor: "#d1d5db",
-        //     shadowOpacity: 0.7,
-        //     shadowRadius: 6,
-        //     shadowOffset: { width: 0, height: 2 },
-        //     elevation: 3,
-        // }}
+    <Pressable className="bg-white rounded-xl items-center min-h-[130px]"
+        style={{
+            shadowColor: "#d1d5db",
+            shadowOpacity: 0.7,
+            shadowRadius: 6,
+            shadowOffset: { width: 0, height: 2 },
+            elevation: 3,
+        }}
         key={id}
+        onPress={onPress}
     >
         <Image
             source={{ uri: image }}
@@ -33,7 +34,7 @@ const BusinessCard: React.FC<BusinessCardProps> = ({
         >
             <Text className="text-white text-[12px] font-quicksand-semibold text-center">View detail</Text>
         </Pressable>
-    </View>
+    </Pressable>
 );
 
 export default BusinessCard;

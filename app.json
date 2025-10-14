@@ -8,15 +8,41 @@
     "scheme": "bizznect",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/images/logo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#016FAE"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.minthiha.bizznect",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Allow BizzNect to access your camera for uploading business logos or photos.",
+        "NSPhotoLibraryUsageDescription": "Allow BizzNect to access your photo library for uploading logos.",
+        "NSLocationWhenInUseUsageDescription": "Allow BizzNect to access your location to autofill addresses."
+      }
     },
     "android": {
+      "package": "com.minthiha.bizznect",
+      "edgeToEdgeEnabled": true,
+      "permissions": [
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.CAMERA",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.RECORD_AUDIO"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/logo.png",
         "backgroundColor": "#ffffff"
-      },
-      "edgeToEdgeEnabled": true
+      }
     },
     "web": {
       "bundler": "metro",
@@ -24,6 +50,7 @@
       "favicon": "./assets/images/logo.png"
     },
     "plugins": [
+      "expo-image-picker",
       "expo-router",
       [
         "expo-splash-screen",
@@ -33,10 +60,32 @@
           "resizeMode": "contain",
           "backgroundColor": "#016FAE"
         }
-      ]
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow BizzNect to use your location."
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera",
+          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
+          "recordAudioAndroid": true
+        }
+      ],
+      "expo-font",
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "9ac6b92d-f4b8-4446-8dbf-96da55b08326"
+      }
     }
   }
 }

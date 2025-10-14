@@ -1,33 +1,42 @@
+import { useAuthStore } from "@/stores/auth-store";
 import { TabBarIconProps } from "@/types";
 import { Feather } from "@expo/vector-icons";
 import cn from "clsx";
-import { Redirect, Tabs } from 'expo-router';
+import { Tabs } from 'expo-router';
+import { useEffect } from "react";
 import { Text, View } from "react-native";
-import { useAuth } from "../../contexts/AuthContext";
 
 const TabBarIcon = ({ focused, icon, title }: TabBarIconProps) => (
     <View className="tab-icon">
         <Feather
             name={icon}
-            size={24}
+            size={22}
             color={focused ? '#016FAE' : '#5D5F6D'}
         />
-        <Text className={cn('text-sm font-quicksand-bold', focused ? 'text-blue-100' : 'text-gray-500')}>
+        <Text className={cn('text-xs font-quicksand-bold', focused ? 'text-blue-100' : 'text-gray-500')}>
             {title}
         </Text>
     </View>
 )
 
 export default function TabsLayout() {
-    const { token } = useAuth();
+    const { userType, setUserType } = useAuthStore();
 
-    if (!token) {
-        return (
-            <View>
-                <Redirect href="/(auth)/sign-in" />
-            </View>
-        );
-    }
+    // Set default to guest ONCE if no userType
+    useEffect(() => {
+        if (!userType) {
+            setUserType("guest");
+            console.log("[TabsLayout] No userType found, setting to ", userType);
+        }
+    }, []);
+
+    // if (!token && userType !== 'guest') {
+    //     return (
+    //         <View>
+    //             <Redirect href="/(auth)/sign-in" />
+    //         </View>
+    //     );
+    // }
 
     return (
         <Tabs
@@ -39,10 +48,10 @@ export default function TabsLayout() {
                     borderTopRightRadius: 50,
                     borderBottomLeftRadius: 50,
                     borderBottomRightRadius: 50,
-                    marginHorizontal: 10,
-                    height: 80,
+                    marginHorizontal: 5,
+                    height: 70,
                     position: 'absolute',
-                    bottom: 25,
+                    bottom: 20,
                     backgroundColor: 'white',
                     shadowColor: '#1a1a1a',
                     shadowOffset: { width: 0, height: 2 },
@@ -64,15 +73,7 @@ export default function TabsLayout() {
                 options={{
                     title: 'Businesses',
                     tabBarIcon: ({ focused }) =>
-                        <TabBarIcon title="Businesses" icon="briefcase" focused={focused} />
-                }}
-            />
-            <Tabs.Screen
-                name='categories'
-                options={{
-                    title: 'Categories',
-                    tabBarIcon: ({ focused }) =>
-                        <TabBarIcon title="Categories" icon="grid" focused={focused} />
+                        <TabBarIcon title="Business" icon="briefcase" focused={focused} />
                 }}
             />
             <Tabs.Screen
@@ -80,7 +81,23 @@ export default function TabsLayout() {
                 options={{
                     title: 'Coupons',
                     tabBarIcon: ({ focused }) =>
-                        <TabBarIcon title="Coupons" icon="tag" focused={focused} />
+                        <TabBarIcon title="Coupon" icon="tag" focused={focused} />
+                }}
+            />
+            <Tabs.Screen
+                name='events'
+                options={{
+                    title: 'Events',
+                    tabBarIcon: ({ focused }) =>
+                        <TabBarIcon title="Event" icon="calendar" focused={focused} />
+                }}
+            />
+            <Tabs.Screen
+                name='promotions'
+                options={{
+                    title: 'Promotions',
+                    tabBarIcon: ({ focused }) =>
+                        <TabBarIcon title="Promotion" icon="percent" focused={focused} />
                 }}
             />
             <Tabs.Screen

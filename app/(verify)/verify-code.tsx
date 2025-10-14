@@ -1,29 +1,32 @@
 import { Feather } from "@expo/vector-icons";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import {
     Alert,
     KeyboardAvoidingView,
     Platform,
     Pressable,
-    SafeAreaView,
     Text,
     TextInput,
     View
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuth } from '../../contexts/AuthContext';
 
 type AuthType = 'user' | 'admin';
 
 const VerifyCode = () => {
-    const [code, setCode] = useState('');
-    const [phone, setPhone] = useState('');
-    const [authType, setAuthType] = useState<AuthType>('user'); // display only
-    const [loading, setLoading] = useState(false);
+    const params = useLocalSearchParams<{ type?: string; otp?: string }>();
     const router = useRouter();
     const { verifyOtp, requestOtp } = useAuth();
 
+    const [code, setCode] = useState('');
+    const [phone, setPhone] = useState('');
+    const [authType, setAuthType] = useState<AuthType>('user');
+    const [loading, setLoading] = useState(false);
+
+    // Load phone, type, and passed OTP
     useEffect(() => {
         const loadPending = async () => {
             const [storedPhone, storedType] = await Promise.all([
@@ -35,24 +38,23 @@ const VerifyCode = () => {
             if (storedType === 'admin' || storedType === 'user') {
                 setAuthType(storedType as AuthType);
             }
-            // Phone is optional for API now; if missing we still allow verification.
+
+            if (params?.otp && typeof params.otp === 'string') {
+                setCode(params.otp); // auto-fill
+            }
         };
 
         loadPending();
-    }, []);
+    }, [params?.otp]);
 
     const handleVerify = async () => {
         if (code.length !== 6) return;
 
         try {
             setLoading(true);
-            await verifyOtp(code); // ✅ Bearer-only + { otp }
+            await verifyOtp(code);
             Alert.alert('Success', 'Your number has been verified.');
-
-            // Clear local pending hints
             await AsyncStorage.multiRemove(['pending_phone', 'pending_type']);
-
-            // ✅ We already have a valid token/session → go home
             router.replace('/(tabs)');
         } catch (err: any) {
             Alert.alert('Verification Failed', err?.response?.data?.message || err.message);
@@ -64,7 +66,11 @@ const VerifyCode = () => {
     const handleResend = async () => {
         try {
             setLoading(true);
-            const msg = await requestOtp(); // ✅ no args
+            const msg = await requestOtp();
+
+            const match = msg?.match(/OTP: (\d{6})/);
+            if (match) setCode(match[1]);
+
             if (msg) Alert.alert('OTP Sent', msg);
         } catch (err: any) {
             Alert.alert('Error', err?.response?.data?.message || err.message);
@@ -80,18 +86,22 @@ const VerifyCode = () => {
                 style={{ flex: 1 }}
             >
                 <View className="flex-1 px-6 pt-10">
-                    {/* Back button */}
                     <Pressable onPress={() => router.push('/(verify)/phone-number')} className="mb-6">
                         <Text className="text-lg text-blue-100">
                             <Feather name="arrow-left" size={28} />
                         </Text>
                     </Pressable>
 
-                    {/* Title */}
                     <Text className="text-2xl font-quicksand-bold mb-1">Enter the verification code</Text>
                     <Text className="text-gray-500 mb-7">
                         {authType === 'admin' ? 'Business User' : 'User'} {phone ? `• ${phone}` : ''}
                     </Text>
+
+                    {/* {code !== '' && (
+                        <Text className="text-lg text-[#176da6] font-quicksand-semibold mb-3">
+                            Use this code: {code}
+                        </Text>
+                    )} */}
 
                     <Text className="text-base text-gray-500 mb-2">Code</Text>
                     <TextInput
@@ -105,14 +115,12 @@ const VerifyCode = () => {
                         textAlign="left"
                     />
 
-                    {/* Resend Code */}
                     <Pressable className="mb-7" onPress={handleResend} disabled={loading}>
                         <Text className="text-[#176da6] text-base font-quicksand-semibold">
                             Resend Code
                         </Text>
                     </Pressable>
 
-                    {/* Next button */}
                     <View className="items-end mt-8">
                         <Pressable
                             className="bg-[#176da6] rounded-full w-14 h-14 items-center justify-center"

@@ -1,11 +1,12 @@
+import { Feather } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from 'react';
-import { Alert, Image, KeyboardAvoidingView, Platform, Pressable, SafeAreaView, Text, View } from 'react-native';
+import { Alert, Image, KeyboardAvoidingView, Platform, Pressable, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuth } from '../../contexts/AuthContext';
-import { Feather } from '@expo/vector-icons';
 
-type AuthType = 'user' | 'admin'; // "admin" is your Business User
+type AuthType = 'user' | 'admin';
 
 const PhoneNumber = () => {
     const router = useRouter();
@@ -13,7 +14,7 @@ const PhoneNumber = () => {
     const params = useLocalSearchParams<{ type?: string }>();
 
     const [phone, setPhone] = useState('');
-    const [authType, setAuthType] = useState<AuthType>('user'); // default
+    const [authType, setAuthType] = useState<AuthType>('user');
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -47,12 +48,18 @@ const PhoneNumber = () => {
         try {
             setLoading(true);
             const message = await requestOtp();
+
+            const match = message?.match(/OTP: (\d{6})/);
+            const otpCode = match ? match[1] : '';
+
             if (__DEV__) console.log('[PhoneNumber] OTP sent:', message);
 
-            // move to verify page, keep type in params
             router.push({
                 pathname: '/(verify)/verify-code',
-                params: { type: authType }
+                params: {
+                    type: authType,
+                    otp: otpCode
+                }
             });
         } catch (err: any) {
             Alert.alert('Error', err?.response?.data?.message || err.message || 'Failed to send OTP.');
@@ -68,14 +75,12 @@ const PhoneNumber = () => {
                 style={{ flex: 1 }}
             >
                 <View className="flex-1 px-6 pt-10">
-                    {/* Back button */}
                     <Pressable onPress={() => router.back()} className="mb-6">
                         <Text className="text-lg text-blue-100">
                             <Feather name="arrow-left" size={28} />
                         </Text>
                     </Pressable>
 
-                    {/* Title */}
                     <Text className="text-2xl font-quicksand-bold mb-1">
                         Verify your mobile number
                     </Text>
@@ -92,7 +97,6 @@ const PhoneNumber = () => {
                         <Text className="text-base text-black">{phone}</Text>
                     </View>
 
-                    {/* Next button */}
                     <View className="items-end mt-8">
                         <Pressable
                             className="bg-[#176da6] rounded-full w-14 h-14 items-center justify-center"
